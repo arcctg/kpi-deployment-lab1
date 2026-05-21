@@ -102,13 +102,9 @@ func (a *App) listNotes(w http.ResponseWriter, r *http.Request) {
 	}
 	defer rows.Close()
 
-	type row struct {
-		ID    int    `json:"id"`
-		Title string `json:"title"`
-	}
-	var notes []row
+	var notes []noteRow
 	for rows.Next() {
-		var n row
+		var n noteRow
 		if err := rows.Scan(&n.ID, &n.Title); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -116,7 +112,7 @@ func (a *App) listNotes(w http.ResponseWriter, r *http.Request) {
 		notes = append(notes, n)
 	}
 	if notes == nil {
-		notes = []row{}
+		notes = []noteRow{}
 	}
 
 	accept := r.Header.Get("Accept")
