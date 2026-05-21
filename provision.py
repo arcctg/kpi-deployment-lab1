@@ -77,6 +77,16 @@ def step_build_app():
     env = os.environ.copy()
     env["GOPATH"] = "/tmp/gopath"
     env["HOME"] = "/root"
+
+    tidy = subprocess.run(
+        "go mod tidy",
+        shell=True, capture_output=True, text=True, cwd=APP_SRC, env=env
+    )
+    if tidy.returncode != 0:
+        print(tidy.stdout, file=sys.stderr)
+        print(tidy.stderr, file=sys.stderr)
+        sys.exit(1)
+
     result = subprocess.run(
         f"go build -o {BINARY_DEST} .",
         shell=True, capture_output=True, text=True, cwd=APP_SRC, env=env
