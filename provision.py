@@ -37,13 +37,15 @@ def user_exists(name):
 
 def step_install_packages():
     run("apt-get update -qq")
-    run("apt-get install -y -qq postgresql nginx golang sudo")
+    run("apt-get install -y -qq postgresql nginx golang sudo wget")
+    run("wget -qO- https://raw.githubusercontent.com/ducaale/xh/master/install.sh | sh")
 
 
 def step_create_users():
     if not user_exists("student"):
         run("useradd -m -s /bin/bash student")
     run("usermod -aG sudo student")
+    run("echo 'student:12345678' | chpasswd")
 
     if not user_exists("teacher"):
         run("useradd -m -s /bin/bash teacher")
@@ -58,6 +60,14 @@ def step_create_users():
         run("useradd -m -s /bin/bash -g operator operator")
     run("echo 'operator:12345678' | chpasswd")
     run("chage -d 0 operator")
+
+
+def step_configure_ssh_auth():
+    ssh_config_path = "/etc/ssh/sshd_config.d/01-password-auth.conf"
+    os.makedirs(os.path.dirname(ssh_config_path), exist_ok=True)
+    with open(ssh_config_path, "w") as f:
+        f.write("PasswordAuthentication yes\n")
+    run("systemctl restart ssh")
 
 
 def step_setup_postgres():
@@ -161,6 +171,7 @@ def main():
     steps = [
         ("Installing packages",           step_install_packages),
         ("Creating users",                step_create_users),
+        ("Configuring SSH password auth", step_configure_ssh_auth),
         ("Setting up PostgreSQL",         step_setup_postgres),
         ("Building Go application",       step_build_app),
         ("Deploying application config",  step_deploy_config),
