@@ -38,7 +38,8 @@ def user_exists(name):
 def step_install_packages():
     run("apt-get update -qq")
     run("apt-get install -y -qq postgresql nginx golang sudo wget")
-    run("wget -qO- https://raw.githubusercontent.com/ducaale/xh/master/install.sh | sh")
+    
+    run("wget -q https://github.com/ducaale/xh/releases/download/v0.25.3/xh-v0.25.3-x86_64-unknown-linux-musl.tar.gz -O /tmp/xh.tar.gz && tar -xzf /tmp/xh.tar.gz -C /usr/local/bin --strip-components=1 xh-v0.25.3-x86_64-unknown-linux-musl/xh && rm /tmp/xh.tar.gz")
 
 
 def step_create_users():
@@ -184,7 +185,7 @@ def main():
     ]
 
     for name, fn in steps:
-        print(f"\n==> {name}")
+        print(f"==> {name}")
         fn()
         print(f"    OK")
 
