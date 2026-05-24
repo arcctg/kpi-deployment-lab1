@@ -131,7 +131,7 @@ vagrant provision
 
 ## Testing
 
-*Detailed testing report lies in [docs/testing.md](/docs/testing.md)*
+*Detailed testing report lies in [docs/testing_report.md](/docs/testing_report.md)*
 
 ### Requirements Coverage
 
