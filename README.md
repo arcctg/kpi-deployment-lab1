@@ -42,6 +42,8 @@ cd kpi-deployment-lab1
 ```
 
 ### Running the Web Application
+
+#### With Vagrant
 ```bash
 vagrant up
 ```
@@ -63,6 +65,45 @@ sudo systemctl reload nginx
 ```
 
 > **Note:** The `operator` user can run the above commands without a password via sudoers rules. The `student` user can run any sudo command after entering the password.
+
+#### With Docker Compose (Lab 2)
+
+The same stack can be run locally in containers without Vagrant.
+
+##### Prerequisites
+
+| Tool | Notes |
+|---|---|
+| [Docker](https://docs.docker.com/get-docker/) | Engine with Compose plugin |
+| [Git](https://git-scm.com/install) | Clone the repository |
+
+##### Start the stack
+
+From the repository root:
+
+```bash
+docker compose up -d --build
+```
+
+The application is available at http://localhost:8080
+
+Services run on a custom bridge network `mywebapp-net`. Database files are stored in the named volume `pgdata` and persist across container restarts and system reboots.
+
+##### Stop the stack
+
+```bash
+docker compose down
+```
+
+This stops and removes containers but keeps the `pgdata` volume with database data.
+
+##### Reset database data
+
+```bash
+docker compose down -v
+```
+
+The `-v` flag removes the `pgdata` volume. The next `docker compose up` starts with an empty database and runs migrations again.
 
 ### API Endpoint Documentation
 
