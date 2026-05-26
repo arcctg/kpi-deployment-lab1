@@ -1,4 +1,7 @@
-# Deployment Lab 1
+# Lab 1 report (with docker from lab 2)
+
+Lab 1 task specification: [docs/task/lab1_task.md](docs/task/lab1_task.md)
+Lab 2 task specification: [docs/task/lab2_task.md](docs/task/lab2_task.md)
 
 ## Variant
 
